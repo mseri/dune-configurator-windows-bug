@@ -1,0 +1,16 @@
+(rule
+ (targets c_flags.sexp)
+ (deps
+  (:deps-conf configure/configure.exe))
+ (action
+  (run %{deps-conf})))
+
+(executable
+ (name test)
+ (public_name test)
+ (foreign_stubs
+  (language c)
+  (names my_stub)
+  (flags
+   :standard
+   (:include c_flags.sexp))))

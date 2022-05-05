@@ -1,0 +1,17 @@
+opam-version: "2.0"
+maintainer: "Marcello Seri"
+authors: [ "Marcello Seri" ]
+license: "MIT"
+homepage: "https://github.com/mseri/dune-configurator-windows-bug"
+dev-repo: "git+https://github.com/mseri/dune-configurator-windows-bug.git"
+bug-reports: "https://github.com/mseri/dune-configurator-windows-bug/issues"
+doc: "https://www.example.com"
+build: [
+  ["dune" "build" "-p" name "-j" jobs]
+]
+depends: [
+  "ocaml" {>= "4.02"}
+  "dune" {>= "2.0.0"}
+  "dune-configurator"
+]
+synopsis: "Repro for a dune-configurator bug with the OCaml Github Actions on windows"
