@@ -41,15 +41,15 @@ let detect_system_arch =
 |}
 
 let default_cflags c =
-  let cur = Sys.getcwd () in
     let os =
       let header =
-        let file, fd = Filename.open_temp_file ~temp_dir:cur ~mode:[Open_wronly] "discover" "os.h" in
+        let file, fd = Filename.open_temp_file ~mode:[Open_wronly] "discover" "os.h" in
         output_string fd detect_system_header;
         close_out fd;
         file
       in
       let platform =
+        assert (Sys.file_exists header);
         C.C_define.import c ~includes:[ header ] [ "PLATFORM_NAME", String ]
       in
       match List.map snd platform with
@@ -62,12 +62,13 @@ let default_cflags c =
     in
     let arch =
       let header =
-        let file, fd = Filename.open_temp_file ~temp_dir:cur ~mode:[Open_wronly] "discover" "arch.h" in
+        let file, fd = Filename.open_temp_file ~mode:[Open_wronly] "discover" "arch.h" in
         output_string fd detect_system_arch;
         close_out fd;
         file
       in
       let arch =
+        assert (Sys.file_exists header);
         C.C_define.import c ~includes:[ header ] [ "PLATFORM_ARCH", String ]
       in
       match List.map snd arch with
