@@ -41,9 +41,10 @@ let detect_system_arch =
 |}
 
 let default_cflags c =
-      let os =
+  let cur = Filename.current_dir_name in
+    let os =
       let header =
-        let file, fd = Filename.open_temp_file ~mode:[Open_wronly] "discover" "os.h" in
+        let file, fd = Filename.open_temp_file ~temp_dir:cur ~mode:[Open_wronly] "discover" "os.h" in
         output_string fd detect_system_header;
         close_out fd;
         file
@@ -61,7 +62,7 @@ let default_cflags c =
     in
     let arch =
       let header =
-        let file, fd = Filename.open_temp_file ~mode:[Open_wronly] "discover" "arch.h" in
+        let file, fd = Filename.open_temp_file ~temp_dir:cur ~mode:[Open_wronly] "discover" "arch.h" in
         output_string fd detect_system_arch;
         close_out fd;
         file
