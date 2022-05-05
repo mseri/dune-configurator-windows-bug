@@ -41,7 +41,7 @@ let detect_system_arch =
 |}
 
 let default_cflags c =
-  let cur = Filename.current_dir_name in
+  let cur = Sys.getcwd () in
     let os =
       let header =
         let file, fd = Filename.open_temp_file ~temp_dir:cur ~mode:[Open_wronly] "discover" "os.h" in
