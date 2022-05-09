@@ -8,9 +8,6 @@
 (executable
  (name test)
  (public_name test)
- (foreign_stubs
-  (language c)
-  (names my_stub)
-  (flags
+ (flags
    :standard
-   (:include c_flags.sexp))))
+   (:include c_flags.sexp)))
