@@ -20,7 +20,7 @@ let default_cflags c =
       file
     in
     let platform =
-      assert (Sys.file_exists header);
+      assert (Sys.file_exists headerfile);
       C.C_define.import c ~includes:[ headerfile ] [ ("TEST", String) ]
     in
     match List.map snd platform with
