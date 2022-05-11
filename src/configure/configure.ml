@@ -41,13 +41,32 @@ let detect_system_arch =
 |}
 
 let default_cflags c =
+  let _arch2 =
+    let defines =
+      C.C_define.import
+          c
+          ~includes:[]
+          [ "__x86_64__", Switch
+          ; "__i386__", Switch
+          ; "__aarch64__", Switch
+          ; "__arm__", Switch
+          ]
+    in
+      let open C in
+      match List.map snd defines with
+      | Switch true :: _ -> `x86_64
+      | _ :: Switch true :: _ -> `x86
+      | _ :: _ :: Switch true :: _ -> `arm64
+      | _ :: _ :: _ :: Switch true :: _ -> `arm
+      | _ -> `unknown
+      in
     let os =
       let header =
         let file, fd = Filename.open_temp_file ~mode:[Open_wronly] "discover" "os.h" in
         output_string fd detect_system_header;
         close_out fd;
         file
-      in
+        in
       let platform =
         assert (Sys.file_exists header);
         C.C_define.import c ~includes:[ header ] [ "PLATFORM_NAME", String ]
@@ -59,14 +78,14 @@ let default_cflags c =
       | [ String "mac" ]     -> `mac
       | [ String "windows" ] -> `windows
       | _                    -> `unknown
-    in
+      in
     let arch =
       let header =
         let file, fd = Filename.open_temp_file ~mode:[Open_wronly] "discover" "arch.h" in
         output_string fd detect_system_arch;
         close_out fd;
         file
-      in
+        in
       let arch =
         assert (Sys.file_exists header);
         C.C_define.import c ~includes:[ header ] [ "PLATFORM_ARCH", String ]
@@ -77,7 +96,7 @@ let default_cflags c =
       | [ String "arm64" ] -> `arm64
       | [ String "arm" ] -> `arm
       | _ -> `unknown
-    in
+      in
     [ (* Basic optimisation *) "-g"; ]
     @ (match arch, os with
       | `arm64, `mac -> []
