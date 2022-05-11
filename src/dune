@@ -4,10 +4,3 @@
   (:deps-conf configure/configure.exe))
  (action
   (run %{deps-conf})))
-
-(executable
- (name test)
- (public_name test)
- (flags
-   :standard
-   (:include c_flags.sexp)))
