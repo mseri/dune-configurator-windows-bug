@@ -36,4 +36,4 @@ jobs:
           opam install test --deps-only
 
       - name: Build project
-        run: opam exec -- dune build -p test
+        run: opam exec -- dune build ./c_flags.sexp
